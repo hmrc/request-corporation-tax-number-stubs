@@ -1,0 +1,3 @@
+# microservice app routes
+
+POST       /generate        @controllers.PdfServiceController.generate

@@ -1,5 +1,6 @@
 # Add all the application routes to the app.routes file
-->         /request-corporation-tax-number-stubs              app.Routes
-->         /                          health.Routes
+->          /pdf-generator-service                              pdfService.Routes
+->          /file-upload                                        fileUpload.Routes
+->          /                                                   health.Routes
 
 GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics
