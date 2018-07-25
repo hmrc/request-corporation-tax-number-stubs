@@ -1,9 +1,10 @@
 package controllers
 
 import javax.inject.Inject
+
 import config.AppConfig
 import play.api.Logger
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, Json}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.microservice.controller.BaseController
@@ -18,13 +19,38 @@ class FileUploadController @Inject()(val wSClient: WSClient, config: AppConfig) 
   val envelopeId = "123-234-345-456"
 
   def createEnvelope(): Action[AnyContent] = Action.async {
-    Logger.info (s"[Fileupload][Create Envelope] ID = $envelopeId")
+    Logger.info(s"[Fileupload][Create Envelope] ID = $envelopeId")
     Future.successful(Created.withHeaders("Location" -> s"http://stubs/$envelopeId"))
   }
 
   def closeEnvelope(): Action[AnyContent] = Action.async {
-    Logger.info (s"[Fileupload][Close Envelope] ID = $envelopeId")
+    Logger.info(s"[Fileupload][Close Envelope] ID = $envelopeId")
     Future.successful(Created.withHeaders("Location" -> s"http://stubs/$envelopeId"))
+  }
+
+  def envelopeSummary(envId:String): Action[AnyContent] = Action.async {
+    Logger.info(s"[Fileupload][Envelope Summary] ID = $envId")
+    Future.successful(
+      Ok(
+        Json.obj(
+          "id" -> envId,
+          "status" -> "OPEN",
+          "files" -> JsArray(
+            Seq(
+              Json.obj(
+                "name" -> "metadata",
+                "status" -> "AVAILABLE"),
+              Json.obj(
+                "name" -> "iform",
+                "status" -> "AVAILABLE"),
+              Json.obj(
+                "name" -> "robotic",
+                "status" -> "AVAILABLE")
+            )
+          )
+        )
+      ).withHeaders("Location" -> s"http://stubs/$envelopeId")
+    )
   }
 
   def upLoadFile(envId: String, fileId: String): Action[AnyContent] = Action.async {
@@ -37,7 +63,7 @@ class FileUploadController @Inject()(val wSClient: WSClient, config: AppConfig) 
          }""".stripMargin
 
       val url = s"${config.callbackUrl}request-corporation-tax-number/file-upload/callback"
-      Logger.info (s"[Fileupload][Upload File] ID = $envelopeId")
+      Logger.info(s"[Fileupload][Upload File] ID = $envelopeId")
       wSClient
         .url(url)
         .post(Json.parse(json))
