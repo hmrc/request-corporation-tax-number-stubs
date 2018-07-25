@@ -1,14 +1,14 @@
 package controllers
 
+import config.AppConfigImpl
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.{JsArray, JsValue, Json}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
-import uk.gov.hmrc.play.test.WithFakeApplication
-import config.AppConfigImpl
 import play.api.test.FakeRequest
-import org.mockito.Mockito.{when, verify, times}
-import org.mockito.Matchers.any
-import play.api.libs.json.JsValue
+import uk.gov.hmrc.play.test.WithFakeApplication
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -35,7 +35,38 @@ class FileUploadControllerSpec extends PlaySpec with WithFakeApplication with Mo
       when(sut.wSClient.url(any())).thenReturn(mockRequest)
 
       val result = Await.result(sut.upLoadFile("envID","fileID")(FakeRequest("POST", "")), 5.seconds)
-      verify(sut.wSClient.url(any()), times(1))
+
+      result.header.status mustBe 200
+    }
+
+    "provide envelope summary" in {
+      val sut = createSUT
+      val body = Json.obj(
+        "id" -> sut.envelopeId,
+        "status" -> "OPEN",
+        "files" -> JsArray(
+          Seq(
+            Json.obj(
+              "name" -> "metadata",
+              "status" -> "AVAILABLE"),
+            Json.obj(
+              "name" -> "iform",
+              "status" -> "AVAILABLE"),
+            Json.obj(
+              "name" -> "robotic",
+              "status" -> "AVAILABLE")
+          )
+        )
+      )
+
+      val mockResponse = createMockResponse(200, body.toString())
+      val mockRequest = mock[WSRequest]
+
+
+      when(mockRequest.get()).thenReturn(Future.successful(mockResponse))
+      when(sut.wSClient.url(any())).thenReturn(mockRequest)
+
+      val result = Await.result(sut.envelopeSummary("envID")(FakeRequest("GET", "")), 5.seconds)
 
       result.header.status mustBe 200
     }
