@@ -14,7 +14,7 @@ class PdfServiceController extends BaseController with StubResource {
 
     val html = request.body.toString
 
-    if(html.contains("<html")) {
+    if(html.contains("html")) {
       Logger.info(s"[PdfServiceController][generating pdf]")
       Future.successful(Ok.sendFile(Play.application.getFile("conf/resources/sample.pdf")))
     } else {
