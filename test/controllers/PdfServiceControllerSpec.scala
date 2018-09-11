@@ -27,7 +27,7 @@ class PdfServiceControllerSpec extends PlaySpec with WithFakeApplication with Mo
 
       val sut = createSUT
 
-      val request = FakeRequest("POST", "").withFormUrlEncodedBody("html" -> "test")
+      val request = FakeRequest("POST", "").withFormUrlEncodedBody("test" -> "test")
 
       val response = sut.generate()(request)
 
