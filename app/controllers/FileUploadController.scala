@@ -62,7 +62,7 @@ class FileUploadController @Inject()(val wSClient: WSClient, config: AppConfig) 
             "status": "AVAILABLE"
          }""".stripMargin
 
-      val url = s"${config.callbackUrl}request-corporation-tax-number/file-upload/callback"
+      val url = s"${config.callbackUrl}/request-corporation-tax-number/file-upload/callback"
       Logger.info(s"[Fileupload][Upload File] ID = $envelopeId")
       wSClient
         .url(url)
