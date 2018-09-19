@@ -1,9 +1,34 @@
-# request-corporation-tax-number-stubs
+# Request corporation tax number stub
 
-[![Build Status](https://travis-ci.org/hmrc/request-corporation-tax-number-stubs.svg)](https://travis-ci.org/hmrc/request-corporation-tax-number-stubs) [ ![Download](https://api.bintray.com/packages/hmrc/releases/request-corporation-tax-number-stubs/images/download.svg) ](https://bintray.com/hmrc/releases/request-corporation-tax-number-stubs/_latestVersion)
+CT UTR Stub. 
 
-This is a placeholder README.md for a new repository
+## Info
 
-### License
+This service is also known as Ask for a copy of your Corporation Tax UTR
 
-This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html")
+## Running the service
+
+Service Manager: CTUTR_ALL 
+
+|Repositories|Link|
+|------------|----|
+|Frontend|https://github.com/hmrc/request-corporation-tax-number-frontend|
+|Backend|https://github.com/hmrc/request-corporation-tax-number|
+|Performance tests|https://github.com/hmrc/request-corporation-tax-number-performance-test|
+
+Routes
+-------
+Port: 9203
+
+### Stubbed file upload
+| *Url* | *Description* |
+|-------|---------------|
+| /file-upload/envelopes | Creates envelope |
+| /file-upload/upload/envelopes/:envelopeId/files/:fileId | Upload file to specific envelope |
+| /file-upload/envelopes/:envelopeId | Summary of the envelope |
+| /file-upload/file-routing/requests | Closes envelope |
+
+### Stubbed pdf generator
+| *Url* | *Description* |
+|-------|---------------|
+| /pdf-generator-service/generate | Generates a PDF |
