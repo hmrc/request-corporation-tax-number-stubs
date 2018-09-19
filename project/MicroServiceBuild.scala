@@ -1,10 +1,9 @@
+import play.core.PlayVersion
 import sbt._
 
 object MicroServiceBuild extends Build with MicroService {
-  import scala.util.Properties.envOrElse
 
   val appName = "request-corporation-tax-number-stubs"
-  val appVersion = envOrElse("REQUEST_CORPORATION_TAX_NUMBER_STUBS_VERSION", "999-SNAPSHOT")
 
   override lazy val appDependencies: Seq[ModuleID] = AppDependencies()
 }
@@ -12,19 +11,25 @@ object MicroServiceBuild extends Build with MicroService {
 private object AppDependencies {
   import play.sbt.PlayImport._
 
+  private val scalaTestPlusPlayVersion = "2.0.1"
+  lazy val scope: String = "test"
+  private val mockitoAllVersion = "1.10.19"
+  private val domainVersion = "5.2.0"
+
   val compile = Seq(
-    filters,
+
     ws,
-    "uk.gov.hmrc" %% "microservice-bootstrap" % "6.10.0",
-    "uk.gov.hmrc" %% "hmrc-stubs-core" % "5.2.0"
+    "uk.gov.hmrc" %% "bootstrap-play-25" % "3.3.0",
+    "uk.gov.hmrc" %% "domain" % domainVersion
   )
 
   val test = Seq(
-    "uk.gov.hmrc" %% "hmrctest" % "2.3.0" % "test,it",
-    "org.scalatest" %% "scalatest" % "2.2.2" % "test,it",
+    "uk.gov.hmrc" %% "hmrctest" % "3.0.0" % "test,it",
+    "org.scalatest" %% "scalatest" % "2.2.6" % "test,it",
     "org.pegdown" % "pegdown" % "1.4.2" % "test,it",
-    "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % "test,it",
-    "org.mockito" % "mockito-all" % "1.9.5" % "test,it"
+    "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
+    "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusPlayVersion % scope,
+    "org.mockito" % "mockito-all" % mockitoAllVersion % scope
   )
 
   def apply() = compile ++ test

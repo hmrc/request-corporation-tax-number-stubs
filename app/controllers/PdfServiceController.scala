@@ -3,12 +3,10 @@ package controllers
 import play.api.Play.current
 import play.api.mvc.Action
 import play.api.{Logger, Play}
-import uk.gov.hmrc.play.microservice.controller.BaseController
-import uk.gov.hmrc.stubs.StubResource
-
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 import scala.concurrent.Future
 
-class PdfServiceController extends BaseController with StubResource {
+class PdfServiceController extends BaseController {
 
   def generate = Action.async { implicit request =>
 
