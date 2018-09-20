@@ -1,20 +1,18 @@
 package controllers
 
 import javax.inject.Inject
-
 import config.AppConfig
 import play.api.Logger
 import play.api.libs.json.{JsArray, Json}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.microservice.controller.BaseController
-import uk.gov.hmrc.stubs.StubResource
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class FileUploadController @Inject()(val wSClient: WSClient, config: AppConfig) extends BaseController with StubResource {
+class FileUploadController @Inject()(val wSClient: WSClient, config: AppConfig) extends BaseController {
 
   val envelopeId = "123-234-345-456"
 

@@ -1,6 +1,6 @@
 package controllers
 
-import config.AppConfigImpl
+import config.AppConfig
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
@@ -14,7 +14,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
 
-class FileUploadControllerSpec extends PlaySpec with WithFakeApplication with MockitoSugar{
+class FileUploadControllerSpec extends PlaySpec with WithFakeApplication with MockitoSugar {
 
   "File-upload controller" should {
 
@@ -86,10 +86,11 @@ class FileUploadControllerSpec extends PlaySpec with WithFakeApplication with Mo
     wsResponse
   }
 
-  val mockWSClient = mock[WSClient]
+  implicit val appConfig: AppConfig = mock[AppConfig]
+  val mockWSClient: WSClient = mock[WSClient]
 
   def createSUT = new SUT
-  class SUT extends FileUploadController(mockWSClient, new AppConfigImpl) {
+  class SUT extends FileUploadController(mockWSClient, appConfig) {
 
   }
 }
