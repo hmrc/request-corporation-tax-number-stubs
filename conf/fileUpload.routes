@@ -1,6 +1,0 @@
-# microservice app routes
-
-POST        /envelopes                                      @controllers.FileUploadController.createEnvelope()
-POST        /file-routing/requests                          @controllers.FileUploadController.closeEnvelope()
-POST        /upload/envelopes/:envelopeId/files/:fileId     @controllers.FileUploadController.upLoadFile(envelopeId: String, fileId: String)
-GET         /envelopes/:envelopeId                          @controllers.FileUploadController.envelopeSummary(envelopeId: String)

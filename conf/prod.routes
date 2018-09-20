@@ -1,6 +1,9 @@
 # Add all the application routes to the app.routes file
-->          /pdf-generator-service                              pdfService.Routes
-->          /file-upload                                        fileUpload.Routes
-->          /                                                   health.Routes
+GET         /admin/metrics                                                 @com.kenshoo.play.metrics.MetricsController.metrics
 
-GET        /admin/metrics             @com.kenshoo.play.metrics.MetricsController.metrics
+POST        /file-upload/envelopes                                         @controllers.FileUploadController.createEnvelope()
+POST        /file-routing/requests                                         @controllers.FileUploadController.closeEnvelope()
+POST        /file-upload/upload/envelopes/:envelopeId/files/:fileId        @controllers.FileUploadController.upLoadFile(envelopeId: String, fileId: String)
+GET         /file-upload/envelopes/:envelopeId                             @controllers.FileUploadController.envelopeSummary(envelopeId: String)
+
+POST        /pdf-generator-service/generate                                @controllers.PdfServiceController.generate
