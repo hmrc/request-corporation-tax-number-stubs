@@ -26,7 +26,7 @@ Port: 9203
 | /file-upload/envelopes | Creates envelope |
 | /file-upload/upload/envelopes/:envelopeId/files/:fileId | Upload file to specific envelope |
 | /file-upload/envelopes/:envelopeId | Summary of the envelope |
-| /file-upload/file-routing/requests | Closes envelope |
+| /file-routing/requests | Closes envelope |
 
 ### Stubbed pdf generator
 | *Url* | *Description* |
