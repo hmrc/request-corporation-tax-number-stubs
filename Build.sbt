@@ -12,18 +12,18 @@ lazy val playSettings: Seq[Setting[_]] = Seq.empty
 val scalaTestPlusPlayVersion = "2.0.1"
 lazy val scope: String = "test"
 val mockitoAllVersion = "1.10.19"
-val domainVersion = "5.2.0"
+val domainVersion = "5.3.0"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-play-25" % "3.7.0",
+  "uk.gov.hmrc" %% "bootstrap-play-25" % "4.8.0",
   "uk.gov.hmrc" %% "domain" % domainVersion
 )
 
 def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc" %% "hmrctest" % "3.0.0" % "test,it",
-  "org.scalatest" %% "scalatest" % "2.2.6" % "test,it",
-  "org.pegdown" % "pegdown" % "1.4.2" % "test,it",
+  "uk.gov.hmrc" %% "hmrctest" % "3.4.0-play-25" % "test,it",
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test,it",
+  "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
   "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
   "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusPlayVersion % scope,
   "org.mockito" % "mockito-all" % mockitoAllVersion % scope
