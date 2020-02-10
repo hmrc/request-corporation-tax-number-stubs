@@ -5,28 +5,25 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val appName = "request-corporation-tax-number-stubs"
 
-lazy val appDependencies: Seq[ModuleID] = compile ++ test()
+lazy val appDependencies: Seq[ModuleID] = compile ++ test
 lazy val plugins: Seq[Plugins] = Seq(play.sbt.PlayScala)
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
-val scalaTestPlusPlayVersion = "2.0.1"
 lazy val scope: String = "test"
-val mockitoAllVersion = "1.10.19"
-val domainVersion = "5.3.0"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-play-25" % "4.11.0",
-  "uk.gov.hmrc" %% "domain" % domainVersion
+  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.3.0",
+  "uk.gov.hmrc" %% "domain" % "5.6.0-play-26"
 )
 
-def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc" %% "hmrctest" % "3.4.0-play-25" % "test,it",
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test,it",
-  "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
-  "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
-  "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusPlayVersion % scope,
-  "org.mockito" % "mockito-all" % mockitoAllVersion % scope
+def test: Seq[ModuleID] = Seq(
+  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % scope,
+  "org.scalatest" %% "scalatest" % "3.0.5" % scope,
+  "org.pegdown" % "pegdown" % "1.6.0" % scope,
+  "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.1" % scope,
+  "org.mockito" % "mockito-core" % "3.2.4" % scope
 )
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]) =
@@ -46,7 +43,7 @@ lazy val microservice = Project(appName, file("."))
     parallelExecution in Test := false,
     fork in Test := false,
     retrieveManaged := true,
-    routesGenerator := StaticRoutesGenerator,
+    routesGenerator := InjectedRoutesGenerator,
     PlayKeys.devSettings += "play.server.http.port" -> "9203"
   )
   .configs(IntegrationTest)

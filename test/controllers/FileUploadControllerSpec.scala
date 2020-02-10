@@ -1,48 +1,59 @@
+/*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers
 
-import config.AppConfig
-import org.mockito.Matchers.any
+import helpers.TestFixture
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatest.mock.MockitoSugar
-import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsArray, JsValue, Json}
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.test.WithFakeApplication
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
 
-class FileUploadControllerSpec extends PlaySpec with WithFakeApplication with MockitoSugar {
+class FileUploadControllerSpec extends TestFixture {
+
+  lazy val fileUploaderController = new FileUploadController(mockWSClient, config, stubCC)
 
   "File-upload controller" should {
 
     "create an envelope" in {
-      val sut = createSUT
-      val result = Await.result(sut.createEnvelope()(FakeRequest("POST", "")), 5.seconds)
+      val result = Await.result(fileUploaderController.createEnvelope()(FakeRequest("POST", "")), 5.seconds)
 
-      result.header.headers("Location").split("/").reverse.head mustBe sut.envelopeId
+      result.header.headers("Location").split("/").reverse.head mustBe fileUploaderController.envelopeId
     }
 
     "upload a file" in {
-      val sut = createSUT
       val mockResponse = createMockResponse(200, "")
       val mockRequest = mock[WSRequest]
 
-
       when(mockRequest.post(any[JsValue]())(any())).thenReturn(Future.successful(mockResponse))
-      when(sut.wSClient.url(any())).thenReturn(mockRequest)
+      when(fileUploaderController.wSClient.url(any())).thenReturn(mockRequest)
 
-      val result = Await.result(sut.upLoadFile("envID","fileID")(FakeRequest("POST", "")), 5.seconds)
+      val result = Await.result(fileUploaderController.upLoadFile("envID","fileID")(FakeRequest("POST", "")), 5.seconds)
 
       result.header.status mustBe 200
     }
 
     "provide envelope summary" in {
-      val sut = createSUT
       val body = Json.obj(
-        "id" -> sut.envelopeId,
+        "id" -> fileUploaderController.envelopeId,
         "status" -> "OPEN",
         "files" -> JsArray(
           Seq(
@@ -64,18 +75,17 @@ class FileUploadControllerSpec extends PlaySpec with WithFakeApplication with Mo
 
 
       when(mockRequest.get()).thenReturn(Future.successful(mockResponse))
-      when(sut.wSClient.url(any())).thenReturn(mockRequest)
+      when(fileUploaderController.wSClient.url(any())).thenReturn(mockRequest)
 
-      val result = Await.result(sut.envelopeSummary("envID")(FakeRequest("GET", "")), 5.seconds)
+      val result = Await.result(fileUploaderController.envelopeSummary("envID")(FakeRequest("GET", "")), 5.seconds)
 
       result.header.status mustBe 200
     }
 
     "close an envelope" in {
-      val sut = createSUT
-      val result = Await.result(sut.closeEnvelope()(FakeRequest("POST", "")), 5.seconds)
+      val result = Await.result(fileUploaderController.closeEnvelope()(FakeRequest("POST", "")), 5.seconds)
 
-      result.header.headers("Location").split("/").reverse.head mustBe sut.envelopeId
+      result.header.headers("Location").split("/").reverse.head mustBe fileUploaderController.envelopeId
     }
   }
 
@@ -84,13 +94,5 @@ class FileUploadControllerSpec extends PlaySpec with WithFakeApplication with Mo
     when(wsResponse.status).thenReturn(status)
     when(wsResponse.body).thenReturn(body)
     wsResponse
-  }
-
-  implicit val appConfig: AppConfig = mock[AppConfig]
-  val mockWSClient: WSClient = mock[WSClient]
-
-  def createSUT = new SUT
-  class SUT extends FileUploadController(mockWSClient, appConfig) {
-
   }
 }
