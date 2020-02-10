@@ -1,22 +1,31 @@
 package controllers
 
-import play.api.Play.current
-import play.api.mvc.Action
-import play.api.{Logger, Play}
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
-import scala.concurrent.Future
+import javax.inject.{Inject, Singleton}
+import play.api.Logger
+import java.io.File
+import play.api.Environment
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
-class PdfServiceController extends BaseController {
+import scala.concurrent.{ExecutionContext, Future}
 
-  def generate = Action.async { implicit request =>
+@Singleton
+class PdfServiceController @Inject()(cc: ControllerComponents) extends BackendController(cc) {
+
+  implicit val ec: ExecutionContext = cc.executionContext
+
+  def generate: Action[AnyContent] = Action.async { implicit request =>
 
     val html = request.body.toString
 
     if(html.contains("html")) {
       Logger.info(s"[PdfServiceController][generating pdf]")
-      Future.successful(Ok.sendFile(Play.application.getFile("conf/resources/sample.pdf")))
+      Future.successful(Ok.sendFile(
+        new File("conf/resources/sample.pdf"),
+        inline = false
+      ).as("application/pdf"))
     } else {
-      Logger.info(s"[PdfServiceController][unable to send pdf]")
+      Logger.warn(s"[PdfServiceController][unable to send pdf]")
       Future.successful(BadRequest("400 - Bad Request (stub)"))
     }
   }

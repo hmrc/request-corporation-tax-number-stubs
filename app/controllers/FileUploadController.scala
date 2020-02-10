@@ -1,18 +1,21 @@
 package controllers
 
-import javax.inject.Inject
 import config.AppConfig
+import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.libs.json.{JsArray, Json}
 import play.api.libs.ws.WSClient
-import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
+class FileUploadController @Inject()(val wSClient: WSClient,
+                                     config: AppConfig,
+                                     cc: ControllerComponents) extends BackendController(cc) {
 
-class FileUploadController @Inject()(val wSClient: WSClient, config: AppConfig) extends BaseController {
+  implicit val ec: ExecutionContext = cc.executionContext
 
   val envelopeId = "123-234-345-456"
 

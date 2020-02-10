@@ -1,11 +1,9 @@
 package config
 
-import javax.inject.Inject
-import play.api.Mode.Mode
-import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.config.ServicesConfig
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-class AppConfig @Inject()(override val runModeConfiguration: Configuration, environment: Environment) extends ServicesConfig {
-  override protected def mode: Mode = environment.mode
-  lazy val callbackUrl: String = baseUrl("request-corporation-tax-number")
+@Singleton
+class AppConfig @Inject()(servicesConfig: ServicesConfig) {
+  lazy val callbackUrl: String = servicesConfig.baseUrl("request-corporation-tax-number")
 }
