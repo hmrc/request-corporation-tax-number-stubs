@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,35 +18,35 @@ package controllers
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json.{JsArray, Json}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FileUploadController @Inject()(val wSClient: WSClient,
                                      config: AppConfig,
-                                     cc: ControllerComponents) extends BackendController(cc) {
+                                     cc: ControllerComponents) extends BackendController(cc) with Logging {
 
   implicit val ec: ExecutionContext = cc.executionContext
 
   val envelopeId = "123-234-345-456"
 
   def createEnvelope(): Action[AnyContent] = Action.async {
-    Logger.info(s"[Fileupload][Create Envelope] ID = $envelopeId")
+    logger.info(s"[Fileupload][Create Envelope] ID = $envelopeId")
     Future.successful(Created.withHeaders("Location" -> s"http://stubs/$envelopeId"))
   }
 
   def closeEnvelope(): Action[AnyContent] = Action.async {
-    Logger.info(s"[Fileupload][Close Envelope] ID = $envelopeId")
+    logger.info(s"[Fileupload][Close Envelope] ID = $envelopeId")
     Future.successful(Created.withHeaders("Location" -> s"http://stubs/$envelopeId"))
   }
 
   def envelopeSummary(envId:String): Action[AnyContent] = Action.async {
-    Logger.info(s"[Fileupload][Envelope Summary] ID = $envId")
+    logger.info(s"[Fileupload][Envelope Summary] ID = $envId")
     Future.successful(
       Ok(
         Json.obj(
@@ -80,7 +80,7 @@ class FileUploadController @Inject()(val wSClient: WSClient,
          }""".stripMargin
 
       val url = s"${config.callbackUrl}/request-corporation-tax-number/file-upload/callback"
-      Logger.info(s"[Fileupload][Upload File] ID = $envelopeId")
+      logger.info(s"[Fileupload][Upload File] ID = $envelopeId")
       wSClient
         .url(url)
         .post(Json.parse(json))

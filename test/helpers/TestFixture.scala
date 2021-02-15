@@ -18,7 +18,7 @@ package helpers
 
 import akka.stream.Materializer
 import config.AppConfig
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
