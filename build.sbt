@@ -1,5 +1,4 @@
 import play.core.PlayVersion
-import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, scalaSettings, targetJvm}
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
@@ -10,20 +9,22 @@ lazy val plugins: Seq[Plugins] = Seq(play.sbt.PlayScala)
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
 lazy val scope: String = "test"
+lazy val silencerVersion: String = "1.7.1"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "2.2.0",
-  "uk.gov.hmrc" %% "domain" % "5.6.0-play-26"
+  "uk.gov.hmrc" %% "bootstrap-backend-play-27" % "4.0.0",
+  "uk.gov.hmrc" %% "domain" % "5.10.0-play-27",
+  compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
+  "com.github.ghik" % "silencer-lib"    % silencerVersion % Provided cross CrossVersion.full
 )
 
 def test: Seq[ModuleID] = Seq(
-  "uk.gov.hmrc" %% "hmrctest" % "3.10.0-play-26",
-  "org.scalatest" %% "scalatest" % "3.0.5" % scope,
-  "org.pegdown" % "pegdown" % "1.6.0" % scope,
-  "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3",
-  "org.mockito" % "mockito-core" % "3.2.4" % scope
+  "org.scalatest"          %% "scalatest"          % "3.0.9" % scope,
+  "org.pegdown"            %  "pegdown"            % "1.6.0" % scope,
+  "com.typesafe.play"      %% "play-test"          % PlayVersion.current % scope,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % scope,
+  "org.mockito"            %  "mockito-core"       % "3.2.4" % scope
 )
 
 
@@ -56,3 +57,7 @@ lazy val microservice = Project(appName, file("."))
     Resolver.jcenterRepo
   ))
   .settings(majorVersion := 0)
+
+scalacOptions ++= Seq(
+  "-P:silencer:pathFilters=views;routes"
+)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,15 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
+import play.api.Logging
 import java.io.File
-import play.api.Environment
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PdfServiceController @Inject()(cc: ControllerComponents) extends BackendController(cc) {
+class PdfServiceController @Inject()(cc: ControllerComponents) extends BackendController(cc) with Logging {
 
   implicit val ec: ExecutionContext = cc.executionContext
 
@@ -35,13 +34,13 @@ class PdfServiceController @Inject()(cc: ControllerComponents) extends BackendCo
     val html = request.body.toString
 
     if(html.contains("html")) {
-      Logger.info(s"[PdfServiceController][generating pdf]")
+      logger.info(s"[PdfServiceController][generating pdf]")
       Future.successful(Ok.sendFile(
         new File("conf/resources/sample.pdf"),
         inline = false
       ).as("application/pdf"))
     } else {
-      Logger.warn(s"[PdfServiceController][unable to send pdf]")
+      logger.warn(s"[PdfServiceController][unable to send pdf]")
       Future.successful(BadRequest("400 - Bad Request (stub)"))
     }
   }
