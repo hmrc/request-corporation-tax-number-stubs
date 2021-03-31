@@ -9,3 +9,4 @@ POST        /file-upload/upload/envelopes/:envelopeId/files/:fileId        @cont
 GET         /file-upload/envelopes/:envelopeId                             @controllers.FileUploadController.envelopeSummary(envelopeId: String)
 
 POST        /pdf-generator-service/generate                                @controllers.PdfServiceController.generate
+GET         /check-your-answers-stub/:CRN                                  @controllers.CompanyHouseController.returnJson(CRN: String)
