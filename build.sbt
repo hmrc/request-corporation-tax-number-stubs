@@ -5,8 +5,6 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 val appName = "request-corporation-tax-number-stubs"
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
-lazy val plugins: Seq[Plugins] = Seq(play.sbt.PlayScala)
-lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
 lazy val scope: String = "test"
 lazy val silencerVersion: String = "1.7.1"
@@ -30,8 +28,7 @@ def test: Seq[ModuleID] = Seq(
 
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(Seq(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
-  .settings(playSettings: _*)
+  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
   .settings(scalaSettings: _*)
   .settings(publishingSettings: _*)
   .settings(defaultSettings(): _*)
@@ -52,10 +49,6 @@ lazy val microservice = Project(appName, file("."))
     addTestReportOption(IntegrationTest, "int-test-reports"),
     parallelExecution in IntegrationTest := false
   )
-  .settings(resolvers ++= Seq(
-    Resolver.bintrayRepo("hmrc", "releases"),
-    Resolver.jcenterRepo
-  ))
   .settings(majorVersion := 0)
 
 scalacOptions ++= Seq(
