@@ -30,17 +30,23 @@ class CompanyHouseController @Inject()(cc: ControllerComponents) extends Backend
 
   implicit val ec: ExecutionContext = cc.executionContext
   private def getJsonResponse(path: String) = {
-    Json.parse(Source.fromInputStream(getClass.getResourceAsStream(s"/resources/json/${path}"), "utf-8").mkString)
+    Json.parse(Source.fromInputStream(getClass.getResourceAsStream(s"/resources/json/$path"), "utf-8").mkString)
   }
 
-  def returnJson(crn: String): Action[AnyContent] = Action.async {
-    logger.info(s"[CompanyHouseController]")
-   crn match{
-     case "00000200"=> Future.successful(Ok(getJsonResponse("200-CompanyHouseResponse.json")))
-     case "00000404"=> Future.successful(NotFound(getJsonResponse("404-CompanyHouseResponse.json")))
-     case "00000429"=> Future.successful(TooManyRequests(getJsonResponse("429-CompanyHouseResponse.json")))
-     case _ => Future.successful(Ok(getJsonResponse("200-CompanyHouseResponse.json")))
-     }
+  def returnJson(crn: String): Action[AnyContent] = Action.async { implicit request =>
+    logger.info(s"[CompanyHouseController][returnJson] Headers are ${request.headers}")
 
+    if(request.headers.hasHeader("Authorization")){
+      crn match{
+        case "00000200"=> Future.successful(Ok(getJsonResponse("200-CompanyHouseResponse.json")))
+        case "00000404"=> Future.successful(NotFound(getJsonResponse("404-CompanyHouseResponse.json")))
+        case "00000429"=> Future.successful(TooManyRequests(getJsonResponse("429-CompanyHouseResponse.json")))
+        case _ => Future.successful(Ok(getJsonResponse("200-CompanyHouseResponse.json")))
+      }
+
+    } else {
+      logger.warn("[CompanyHouseController][returnJson] Missing Authorization header")
+      Future.successful(BadRequest("Authorization Header is missing"))
+    }
   }
 }

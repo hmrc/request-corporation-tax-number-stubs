@@ -27,7 +27,7 @@ def test: Seq[ModuleID] = Seq(
 
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
+  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .settings(scalaSettings: _*)
   .settings(publishingSettings: _*)
   .settings(defaultSettings(): _*)
@@ -39,7 +39,7 @@ lazy val microservice = Project(appName, file("."))
     fork in Test := false,
     retrieveManaged := true,
     routesGenerator := InjectedRoutesGenerator,
-    PlayKeys.devSettings += "play.server.http.port" -> "9203"
+    PlayKeys.playDefaultPort := 9203,
   )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
