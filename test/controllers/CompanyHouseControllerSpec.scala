@@ -18,7 +18,7 @@ package controllers
 
 import helpers.TestFixture
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, contentType, _}
+import play.api.test.Helpers._
 
 class CompanyHouseControllerSpec extends TestFixture {
 
