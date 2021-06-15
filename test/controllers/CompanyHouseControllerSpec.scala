@@ -17,30 +17,27 @@
 package controllers
 
 import helpers.TestFixture
+import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
 class CompanyHouseControllerSpec extends TestFixture {
-
   lazy val CompanyHouseController = new CompanyHouseController(stubCC)
+  val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("GET","")
+    .withFormUrlEncodedBody("html" -> "<html")
+    .withHeaders("Authorization" -> "")
 
   "CompanyHouseController" should {
 
+
     "return an ok json with the company name when a request with 00000200 is received " in {
-
-      val request = FakeRequest("GET","").withFormUrlEncodedBody("html" -> "<html")
-
       val response = CompanyHouseController.returnJson("00000200").apply(request)
 
       status(response) mustBe OK
       contentType(response) mustBe Some("application/json")
     }
 
-
     "return a not found json with the company name when a request with 00000404 is received " in {
-
-      val request = FakeRequest("GET","").withFormUrlEncodedBody("html" -> "<html")
-
       val response = CompanyHouseController.returnJson("00000404").apply(request)
 
       status(response) mustBe NOT_FOUND
@@ -48,9 +45,6 @@ class CompanyHouseControllerSpec extends TestFixture {
     }
 
     "return a not found json with the company name when a request with 00000429 is received " in {
-
-      val request = FakeRequest("GET","").withFormUrlEncodedBody("html" -> "<html")
-
       val response = CompanyHouseController.returnJson("00000429").apply(request)
 
       status(response) mustBe TOO_MANY_REQUESTS
@@ -58,14 +52,10 @@ class CompanyHouseControllerSpec extends TestFixture {
     }
 
     "return an ok json with the company name when a request with anything else is received " in {
-
-      val request = FakeRequest("GET","").withFormUrlEncodedBody("html" -> "<html")
-
       val response = CompanyHouseController.returnJson("11111169").apply(request)
 
       status(response) mustBe OK
       contentType(response) mustBe Some("application/json")
     }
-
   }
 }
