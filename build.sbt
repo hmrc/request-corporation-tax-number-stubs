@@ -11,17 +11,17 @@ lazy val silencerVersion: String = "1.7.1"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-backend-play-28" % "5.10.0",
-  "uk.gov.hmrc" %% "domain" % "6.2.0-play-28",
+  "uk.gov.hmrc" %% "bootstrap-backend-play-28" % "5.20.0",
+  "uk.gov.hmrc" %% "domain" % "7.0.0-play-28",
   compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
   "com.github.ghik" % "silencer-lib"    % silencerVersion % Provided cross CrossVersion.full
 )
 
 def test: Seq[ModuleID] = Seq(
   "org.pegdown"            %  "pegdown"            % "1.6.0" % scope,
-  "com.vladsch.flexmark"   %  "flexmark-all"       % "0.36.8" % scope,
+  "com.vladsch.flexmark"   %  "flexmark-all"       % "0.62.2" % scope,
   "com.typesafe.play"      %% "play-test"          % PlayVersion.current % scope,
-  "org.scalatestplus"      %% "mockito-3-4"        % "3.2.9.0" % scope,
+  "org.scalatestplus"      %% "mockito-3-4"        % "3.2.10.0" % scope,
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % scope
 )
 
