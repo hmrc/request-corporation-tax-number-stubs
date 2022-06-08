@@ -11,7 +11,7 @@ lazy val silencerVersion: String = "1.7.1"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-backend-play-28" % "5.20.0",
+  "uk.gov.hmrc" %% "bootstrap-backend-play-28" % "5.24.0",
   "uk.gov.hmrc" %% "domain" % "7.0.0-play-28",
   compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
   "com.github.ghik" % "silencer-lib"    % silencerVersion % Provided cross CrossVersion.full
