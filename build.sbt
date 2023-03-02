@@ -1,20 +1,16 @@
 import play.core.PlayVersion
 import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, scalaSettings, targetJvm}
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val appName = "request-corporation-tax-number-stubs"
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
 
 lazy val scope: String = "test"
-lazy val silencerVersion: String = "1.7.1"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-backend-play-28" % "5.24.0",
-  "uk.gov.hmrc" %% "domain" % "7.0.0-play-28",
-  compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
-  "com.github.ghik" % "silencer-lib"    % silencerVersion % Provided cross CrossVersion.full
+  "uk.gov.hmrc" %% "bootstrap-backend-play-28" % "7.14.0",
+  "uk.gov.hmrc" %% "domain" % "8.1.0-play-28",
 )
 
 def test: Seq[ModuleID] = Seq(
@@ -30,14 +26,13 @@ def test: Seq[ModuleID] = Seq(
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .settings(scalaSettings: _*)
-  .settings(publishingSettings: _*)
   .settings(defaultSettings(): _*)
   .settings(
-    scalaVersion := "2.12.12",
+    scalaVersion := "2.13.10",
     targetJvm := "jvm-1.8",
     libraryDependencies ++= appDependencies,
-    parallelExecution in Test := false,
-    fork in Test := false,
+    Test / parallelExecution := false,
+    Test / fork := false,
     retrieveManaged := true,
     routesGenerator := InjectedRoutesGenerator,
     PlayKeys.playDefaultPort := 9203,
@@ -45,12 +40,8 @@ lazy val microservice = Project(appName, file("."))
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
   .settings(
-    Keys.fork in IntegrationTest := false,
+    IntegrationTest / Keys.fork := false,
     addTestReportOption(IntegrationTest, "int-test-reports"),
-    parallelExecution in IntegrationTest := false
+    IntegrationTest / parallelExecution := false
   )
   .settings(majorVersion := 0)
-
-scalacOptions ++= Seq(
-  "-P:silencer:pathFilters=views;routes"
-)
