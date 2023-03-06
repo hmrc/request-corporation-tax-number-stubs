@@ -6,19 +6,22 @@ val appName = "request-corporation-tax-number-stubs"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
 
 lazy val scope: String = "test"
+val bootstrapVersion = "7.14.0"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-backend-play-28" % "7.14.0",
+  "uk.gov.hmrc" %% "bootstrap-backend-play-28" % bootstrapVersion,
   "uk.gov.hmrc" %% "domain" % "8.1.0-play-28",
 )
 
 def test: Seq[ModuleID] = Seq(
-  "org.pegdown"            %  "pegdown"            % "1.6.0" % scope,
-  "com.vladsch.flexmark"   %  "flexmark-all"       % "0.62.2" % scope,
-  "com.typesafe.play"      %% "play-test"          % PlayVersion.current % scope,
-  "org.scalatestplus"      %% "mockito-3-4"        % "3.2.10.0" % scope,
-  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % scope
+
+  "org.pegdown"            %  "pegdown"                 % "1.6.0" % scope,
+  "com.vladsch.flexmark"   %  "flexmark-all"            % "0.62.2" % scope,
+  "com.typesafe.play"      %% "play-test"               % PlayVersion.current % scope,
+  "org.scalatestplus"      %% "mockito-3-4"             % "3.2.10.0" % scope,
+  "org.scalatestplus.play" %% "scalatestplus-play"      % "5.1.0" % scope,
+  "uk.gov.hmrc"            %% "bootstrap-test-play-28"  % bootstrapVersion % scope
 )
 
 
