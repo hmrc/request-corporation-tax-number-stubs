@@ -38,8 +38,7 @@ lazy val microservice = Project(appName, file("."))
     Test / fork := false,
     retrieveManaged := true,
     routesGenerator := InjectedRoutesGenerator,
-    PlayKeys.playDefaultPort := 9203,
-    update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
+    PlayKeys.playDefaultPort := 9203
   )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
