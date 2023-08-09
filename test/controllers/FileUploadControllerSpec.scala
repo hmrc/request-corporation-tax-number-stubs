@@ -19,6 +19,7 @@ package controllers
 import helpers.TestFixture
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import play.api.http.Status.OK
 import play.api.libs.json.{JsArray, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.FakeRequest
@@ -40,7 +41,7 @@ class FileUploadControllerSpec extends TestFixture {
     }
 
     "upload a file" in {
-      val mockResponse = createMockResponse(200, "")
+      val mockResponse = createMockResponse(OK, "")
       val mockRequest = mock[WSRequest]
 
       when(mockRequest.post(any[JsValue]())(any())).thenReturn(Future.successful(mockResponse))
@@ -70,7 +71,7 @@ class FileUploadControllerSpec extends TestFixture {
         )
       )
 
-      val mockResponse = createMockResponse(200, body.toString())
+      val mockResponse = createMockResponse(OK, body.toString())
       val mockRequest = mock[WSRequest]
 
 
