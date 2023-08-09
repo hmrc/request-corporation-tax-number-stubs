@@ -1,11 +1,9 @@
-import play.core.PlayVersion
 import play.sbt.PlayImport.ws
 import sbt.{ModuleID, _}
 
 object AppDependencies {
 
-  private lazy val scope: String = "test"
-  private val bootstrapVersion = "7.14.0"
+  private val bootstrapVersion = "7.21.0"
 
   private val compile = Seq(
     ws,
@@ -15,13 +13,11 @@ object AppDependencies {
 
   private val test: Seq[ModuleID] = Seq(
 
-    "org.pegdown"            %  "pegdown"                 % "1.6.0" % scope,
-    "com.vladsch.flexmark"   %  "flexmark-all"            % "0.64.8" % scope,
-    "com.typesafe.play"      %% "play-test"               % PlayVersion.current % scope,
-    "org.scalatestplus"      %% "mockito-3-4"             % "3.2.10.0" % scope,
-    "org.scalatestplus.play" %% "scalatestplus-play"      % "5.1.0" % scope,
-    "uk.gov.hmrc"            %% "bootstrap-test-play-28"  % bootstrapVersion % scope
-  )
+    "com.vladsch.flexmark"   %  "flexmark-all"            % "0.64.8",
+    "org.scalatest"          %% "scalatest"               % "3.2.16",
+    "org.scalatestplus"      %% "mockito-4-11"            % "3.2.16.0",
+    "uk.gov.hmrc"            %% "bootstrap-test-play-28"  % bootstrapVersion
+  ).map(_ % Test)
 
   def apply(): Seq[ModuleID] = compile ++ test
 
