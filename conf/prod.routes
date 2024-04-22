@@ -1,8 +1,6 @@
 # Add all the application routes to the app.routes file
 ->          /                                                              health.Routes
 
-GET         /admin/metrics                                                 @com.kenshoo.play.metrics.MetricsController.metrics
-
 POST        /file-upload/envelopes                                         @controllers.FileUploadController.createEnvelope()
 POST        /file-routing/requests                                         @controllers.FileUploadController.closeEnvelope()
 POST        /file-upload/upload/envelopes/:envelopeId/files/:fileId        @controllers.FileUploadController.upLoadFile(envelopeId: String, fileId: String)
