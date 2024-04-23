@@ -8,7 +8,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(scalaSettings)
   .settings(defaultSettings())
   .settings(
-    scalaVersion := "2.13.10",
+    scalaVersion := "2.13.13",
     libraryDependencies ++= AppDependencies(),
     Test / parallelExecution := false,
     Test / fork := false,
@@ -24,10 +24,8 @@ lazy val microservice = Project(appName, file("."))
     coverageFailOnMinimum := true,
     coverageHighlighting := true,
     Test / parallelExecution := false,
-    // To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
-    libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
     scalacOptions -= "-Xmax-classfile-name",
-    scalacOptions += "-Wconf:src=routes/.*:s"
+    scalacOptions += "-Wconf:cat=unused-imports&src=routes/.*:s"
   )
 
 addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle")
