@@ -16,34 +16,50 @@
 
 package controllers
 
+import models.CompanyDetails
 import play.api.Logging
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
+import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.io.Source
+import scala.util.Try
 
 @Singleton
 class CompanyHouseController @Inject()(cc: ControllerComponents) extends BackendController(cc) with Logging {
 
   implicit val ec: ExecutionContext = cc.executionContext
-  private def getJsonResponse(path: String) = {
+
+  private def getJsonResponse(path: String): JsValue = {
     Json.parse(Source.fromInputStream(getClass.getResourceAsStream(s"/resources/json/$path"), "utf-8").mkString)
   }
 
-  def returnJson(crn: String): Action[AnyContent] = Action.async { implicit request =>
+  private def createJsonResponseWithDateOfCreation(): JsValue = {
+    val daysSinceCompanyCreation = 7
+    val companyDetailsFromFile = Try(getJsonResponse("200-CompanyHouseResponse.json").as[CompanyDetails])
+
+    val companyCreationDate = LocalDate.now().minusDays(daysSinceCompanyCreation)
+    val companyDetails = companyDetailsFromFile.get.copy(dateOfCreation = Some(companyCreationDate))
+
+    Json.toJson(companyDetails)
+  }
+
+  def returnJson(companyReferenceNumber: String): Action[AnyContent] = Action.async { implicit request =>
     logger.info(s"[CompanyHouseController][returnJson] Headers are ${request.headers}")
 
-    if(request.headers.hasHeader("Authorization")){
-      crn match{
-        case "00000200"=> Future.successful(Ok(getJsonResponse("200-CompanyHouseResponse.json")))
-        case "00000404"=> Future.successful(NotFound(getJsonResponse("404-CompanyHouseResponse.json")))
-        case "00000429"=> Future.successful(TooManyRequests(getJsonResponse("429-CompanyHouseResponse.json")))
-        case _ => Future.successful(Ok(getJsonResponse("200-CompanyHouseResponse.json")))
+    if (request.headers.hasHeader("Authorization")) {
+      Future.successful {
+        companyReferenceNumber match {
+          case "00000200" => Ok(getJsonResponse("200-CompanyHouseResponse.json"))
+          case "00000201" => Ok(createJsonResponseWithDateOfCreation())
+          case "00000404" => NotFound(getJsonResponse("404-CompanyHouseResponse.json"))
+          case "00000429" => TooManyRequests(getJsonResponse("429-CompanyHouseResponse.json"))
+          case _ => Ok(getJsonResponse("200-CompanyHouseResponse.json"))
+        }
       }
-
     } else {
       logger.warn("[CompanyHouseController][returnJson] Missing Authorization header")
       Future.successful(BadRequest("Authorization Header is missing"))
