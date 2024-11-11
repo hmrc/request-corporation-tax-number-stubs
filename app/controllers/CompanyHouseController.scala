@@ -53,8 +53,8 @@ class CompanyHouseController @Inject()(cc: ControllerComponents) extends Backend
       Future.successful {
         companyReferenceNumber match {
           case "00000200" => Ok(getJsonResponse("200-CompanyHouseResponse.json"))
-          case "00000007" => Ok(createJsonResponseWithDateOfCreation(7))
-          case "00000008" => Ok(createJsonResponseWithDateOfCreation(8))
+          case "00000007" => Ok(createJsonResponseWithDateOfCreation(daysSinceCompanyCreation = 7))
+          case "00000008" => Ok(createJsonResponseWithDateOfCreation(daysSinceCompanyCreation = 8))
           case "00000404" => NotFound(getJsonResponse("404-CompanyHouseResponse.json"))
           case "00000429" => TooManyRequests(getJsonResponse("429-CompanyHouseResponse.json"))
           case _ => Ok(getJsonResponse("200-CompanyHouseResponse.json"))
