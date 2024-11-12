@@ -22,7 +22,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import java.time.LocalDate
+import java.time.{LocalDate, ZoneId}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.io.Source
@@ -40,7 +40,7 @@ class CompanyHouseController @Inject()(cc: ControllerComponents) extends Backend
   private def createJsonResponseWithDateOfCreation(daysSinceCompanyCreation: Int): JsValue = {
     val companyDetailsFromFile = Try(getJsonResponse("200-CompanyHouseResponse.json").as[CompanyDetails])
 
-    val companyCreationDate = LocalDate.now().minusDays(daysSinceCompanyCreation)
+    val companyCreationDate = LocalDate.now(ZoneId.of("GMT")).minusDays(daysSinceCompanyCreation)
     val companyDetails = companyDetailsFromFile.get.copy(dateOfCreation = Some(companyCreationDate))
 
     Json.toJson(companyDetails)
