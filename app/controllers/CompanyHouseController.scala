@@ -26,7 +26,6 @@ import java.time.{LocalDate, ZoneId}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.io.Source
-import scala.util.Try
 
 @Singleton
 class CompanyHouseController @Inject()(cc: ControllerComponents) extends BackendController(cc) with Logging {
@@ -38,10 +37,10 @@ class CompanyHouseController @Inject()(cc: ControllerComponents) extends Backend
   }
 
   private def createJsonResponseWithDateOfCreation(daysSinceCompanyCreation: Int): JsValue = {
-    val companyDetailsFromFile = Try(getJsonResponse("200-CompanyHouseResponse.json").as[CompanyDetails])
+    val companyDetailsFromFile = getJsonResponse("200-CompanyHouseResponse.json").as[CompanyDetails]
 
     val companyCreationDate = LocalDate.now(ZoneId.of("GMT")).minusDays(daysSinceCompanyCreation)
-    val companyDetails = companyDetailsFromFile.get.copy(dateOfCreation = Some(companyCreationDate))
+    val companyDetails = companyDetailsFromFile.copy(dateOfCreation = Some(companyCreationDate))
 
     Json.toJson(companyDetails)
   }
