@@ -61,6 +61,15 @@ class CompanyHouseControllerSpec extends TestFixture with ScalaFutures {
       contentType(response) mustBe Some("application/json")
     }
 
+    "return an OK response, with the company name and date of creation as 65 days ago, given a request for company 00000065" in {
+      val response = CompanyHouseController.returnJson("00000065").apply(request)
+      val expectedResult = Json.toJson(CompanyDetails("company", Some(LocalDate.now(ZoneId.of("GMT")).minusDays(65))))
+
+      contentAsString(response) mustEqual expectedResult.toString()
+      status(response) mustBe OK
+      contentType(response) mustBe Some("application/json")
+    }
+
     "return a NOT_FOUND response, with relevant errors, given a request for company 00000404" in {
       val response = CompanyHouseController.returnJson("00000404").apply(request)
 

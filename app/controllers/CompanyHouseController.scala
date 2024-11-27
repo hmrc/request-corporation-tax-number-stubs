@@ -54,6 +54,7 @@ class CompanyHouseController @Inject()(cc: ControllerComponents) extends Backend
           case "00000200" => Ok(getJsonResponse("200-CompanyHouseResponse.json"))
           case "00000007" => Ok(createJsonResponseWithDateOfCreation(daysSinceCompanyCreation = 7))
           case "00000008" => Ok(createJsonResponseWithDateOfCreation(daysSinceCompanyCreation = 8))
+          case "00000065" => Ok(createJsonResponseWithDateOfCreation(daysSinceCompanyCreation = 65))
           case "00000404" => NotFound(getJsonResponse("404-CompanyHouseResponse.json"))
           case "00000429" => TooManyRequests(getJsonResponse("429-CompanyHouseResponse.json"))
           case _ => Ok(getJsonResponse("200-CompanyHouseResponse.json"))
