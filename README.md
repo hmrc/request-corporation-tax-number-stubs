@@ -40,11 +40,11 @@ sbt run
 
 Port: `9203`
 
-#### Stubbed pdf generator
+#### Stub for check your answers
 
-| Url | Description |
-|-----|-------------|
-| /pdf-generator-service/generate | Generates a PDF |
+| Url | Description                    |
+|-----|--------------------------------|
+| /check-your-answers-stub/:CRN | returns company house response |
 
 ---
 
