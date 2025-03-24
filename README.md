@@ -40,21 +40,11 @@ sbt run
 
 Port: `9203`
 
-#### Stubbed file upload
+#### Stub for check your answers
 
-| Url | Description |
-|-----|-------------|
-| /file-upload/envelopes | Creates envelope |
-| /file-upload/upload/envelopes/:envelopeId/files/:fileId | Upload file to specific envelope |
-| /file-upload/envelopes/:envelopeId | Summary of the envelope |
-| /file-routing/requests | Closes envelope |
-
-
-#### Stubbed pdf generator
-
-| Url | Description |
-|-----|-------------|
-| /pdf-generator-service/generate | Generates a PDF |
+| Url | Description                    |
+|-----|--------------------------------|
+| /check-your-answers-stub/:CRN | returns company house response |
 
 ---
 
