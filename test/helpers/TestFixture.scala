@@ -17,7 +17,6 @@
 package helpers
 
 import org.apache.pekko.stream.Materializer
-import config.AppConfig
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -38,7 +37,6 @@ trait TestFixture extends PlaySpec with MockitoSugar with GuiceOneAppPerSuite {
   lazy val injector: Injector = app.injector
   implicit lazy val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
 
-  val config: AppConfig = mock[AppConfig]
   val stubCC: ControllerComponents = stubControllerComponents()
   val mockWSClient: WSClient = mock[WSClient]
 }
