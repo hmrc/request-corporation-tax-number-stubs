@@ -27,7 +27,6 @@ import play.api.test.FakeRequest
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
-
 class FileUploadControllerSpec extends TestFixture {
 
   lazy val fileUploaderController = new FileUploadController(mockWSClient, config, stubCC)
@@ -42,38 +41,32 @@ class FileUploadControllerSpec extends TestFixture {
 
     "upload a file" in {
       val mockResponse = createMockResponse(OK, "")
-      val mockRequest = mock[WSRequest]
+      val mockRequest  = mock[WSRequest]
 
       when(mockRequest.post(any[JsValue]())(any())).thenReturn(Future.successful(mockResponse))
       when(fileUploaderController.wSClient.url(any())).thenReturn(mockRequest)
 
-      val result = Await.result(fileUploaderController.upLoadFile("envID","fileID")(FakeRequest("POST", "")), 5.seconds)
+      val result =
+        Await.result(fileUploaderController.upLoadFile("envID", "fileID")(FakeRequest("POST", "")), 5.seconds)
 
       result.header.status mustBe 200
     }
 
     "provide envelope summary" in {
       val body = Json.obj(
-        "id" -> fileUploaderController.envelopeId,
+        "id"     -> fileUploaderController.envelopeId,
         "status" -> "OPEN",
-        "files" -> JsArray(
+        "files"  -> JsArray(
           Seq(
-            Json.obj(
-              "name" -> "metadata",
-              "status" -> "AVAILABLE"),
-            Json.obj(
-              "name" -> "iform",
-              "status" -> "AVAILABLE"),
-            Json.obj(
-              "name" -> "robotic",
-              "status" -> "AVAILABLE")
+            Json.obj("name" -> "metadata", "status" -> "AVAILABLE"),
+            Json.obj("name" -> "iform", "status"    -> "AVAILABLE"),
+            Json.obj("name" -> "robotic", "status"  -> "AVAILABLE")
           )
         )
       )
 
       val mockResponse = createMockResponse(OK, body.toString())
-      val mockRequest = mock[WSRequest]
-
+      val mockRequest  = mock[WSRequest]
 
       when(mockRequest.get()).thenReturn(Future.successful(mockResponse))
       when(fileUploaderController.wSClient.url(any())).thenReturn(mockRequest)
@@ -96,4 +89,5 @@ class FileUploadControllerSpec extends TestFixture {
     when(wsResponse.body).thenReturn(body)
     wsResponse
   }
+
 }

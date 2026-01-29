@@ -27,7 +27,8 @@ import play.api.test.Helpers._
 import java.time.{LocalDate, ZoneId}
 
 class CompanyHouseControllerSpec extends TestFixture with ScalaFutures {
-  lazy val CompanyHouseController = new CompanyHouseController(stubCC)
+  lazy val CompanyHouseController                      = new CompanyHouseController(stubCC)
+
   val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("GET", "")
     .withFormUrlEncodedBody("html" -> "<html")
     .withHeaders("Authorization" -> "")
@@ -35,38 +36,38 @@ class CompanyHouseControllerSpec extends TestFixture with ScalaFutures {
   "CompanyHouseController" should {
 
     "return an OK response with company name, given a request for company 00000200" in {
-      val response = CompanyHouseController.returnJson("00000200").apply(request)
+      val response       = CompanyHouseController.returnJson("00000200").apply(request)
       val expectedResult = """{"company_name":"company"}""".stripMargin
 
       contentAsString(response) mustEqual expectedResult
-      status(response) mustBe OK
+      status(response)      mustBe OK
       contentType(response) mustBe Some("application/json")
     }
 
     "return an OK response, with the company name and date of creation as 7 days ago, given a request for company 00000007" in {
-      val response = CompanyHouseController.returnJson("00000007").apply(request)
+      val response       = CompanyHouseController.returnJson("00000007").apply(request)
       val expectedResult = Json.toJson(CompanyDetails("company", Some(LocalDate.now(ZoneId.of("GMT")).minusDays(7))))
 
       contentAsString(response) mustEqual expectedResult.toString()
-      status(response) mustBe OK
+      status(response)      mustBe OK
       contentType(response) mustBe Some("application/json")
     }
 
     "return an OK response, with the company name and date of creation as 8 days ago, given a request for company 00000008" in {
-      val response = CompanyHouseController.returnJson("00000008").apply(request)
+      val response       = CompanyHouseController.returnJson("00000008").apply(request)
       val expectedResult = Json.toJson(CompanyDetails("company", Some(LocalDate.now(ZoneId.of("GMT")).minusDays(8))))
 
       contentAsString(response) mustEqual expectedResult.toString()
-      status(response) mustBe OK
+      status(response)      mustBe OK
       contentType(response) mustBe Some("application/json")
     }
 
     "return an OK response, with the company name and date of creation as 65 days ago, given a request for company 00000065" in {
-      val response = CompanyHouseController.returnJson("00000065").apply(request)
+      val response       = CompanyHouseController.returnJson("00000065").apply(request)
       val expectedResult = Json.toJson(CompanyDetails("company", Some(LocalDate.now(ZoneId.of("GMT")).minusDays(65))))
 
       contentAsString(response) mustEqual expectedResult.toString()
-      status(response) mustBe OK
+      status(response)      mustBe OK
       contentType(response) mustBe Some("application/json")
     }
 
@@ -77,21 +78,21 @@ class CompanyHouseControllerSpec extends TestFixture with ScalaFutures {
         """{"errors":[{"type":"ch:service","error":"company-profile-not-found"}]}""".stripMargin
 
       contentAsString(response) mustEqual expectedError
-      status(response) mustBe NOT_FOUND
+      status(response)      mustBe NOT_FOUND
       contentType(response) mustBe Some("application/json")
     }
 
     "return a TOO_MANY_REQUESTS response, given a request for company 00000429" in {
       val response = CompanyHouseController.returnJson("00000429").apply(request)
 
-      status(response) mustBe TOO_MANY_REQUESTS
+      status(response)      mustBe TOO_MANY_REQUESTS
       contentType(response) mustBe Some("application/json")
     }
 
     "return an OK response, given a company number not in the expected values" in {
       val response = CompanyHouseController.returnJson("11111169").apply(request)
 
-      status(response) mustBe OK
+      status(response)      mustBe OK
       contentType(response) mustBe Some("application/json")
     }
 
@@ -103,4 +104,5 @@ class CompanyHouseControllerSpec extends TestFixture with ScalaFutures {
       status(response) mustBe BAD_REQUEST
     }
   }
+
 }
