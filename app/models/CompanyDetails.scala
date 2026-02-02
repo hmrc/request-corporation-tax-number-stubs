@@ -20,11 +20,10 @@ import play.api.libs.json._
 import java.time.LocalDate
 import play.api.libs.json.JsonNaming.SnakeCase
 
-
 case class CompanyDetails(companyName: String, dateOfCreation: Option[LocalDate])
 
 object CompanyDetails {
-  implicit val config: JsonConfiguration = JsonConfiguration(SnakeCase)
+  implicit val config: JsonConfiguration          = JsonConfiguration(SnakeCase)
   implicit val localDateFormat: Format[LocalDate] = Format(Reads.DefaultLocalDateReads, Writes.DefaultLocalDateWrites)
-  implicit val format: OFormat[CompanyDetails] = Json.format[CompanyDetails]
+  implicit val format: OFormat[CompanyDetails]    = Json.format[CompanyDetails]
 }

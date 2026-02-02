@@ -27,9 +27,8 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class FileUploadController @Inject()(val wSClient: WSClient,
-                                     config: AppConfig,
-                                     cc: ControllerComponents) extends BackendController(cc) with Logging {
+class FileUploadController @Inject() (val wSClient: WSClient, config: AppConfig, cc: ControllerComponents)
+    extends BackendController(cc) with Logging {
 
   implicit val ec: ExecutionContext = cc.executionContext
 
@@ -45,24 +44,18 @@ class FileUploadController @Inject()(val wSClient: WSClient,
     Future.successful(Created.withHeaders("Location" -> s"http://stubs/$envelopeId"))
   }
 
-  def envelopeSummary(envId:String): Action[AnyContent] = Action.async {
+  def envelopeSummary(envId: String): Action[AnyContent] = Action.async {
     logger.info(s"[Fileupload][Envelope Summary] ID = $envId")
     Future.successful(
       Ok(
         Json.obj(
-          "id" -> envId,
+          "id"     -> envId,
           "status" -> "OPEN",
-          "files" -> JsArray(
+          "files"  -> JsArray(
             Seq(
-              Json.obj(
-                "name" -> "metadata",
-                "status" -> "AVAILABLE"),
-              Json.obj(
-                "name" -> "iform",
-                "status" -> "AVAILABLE"),
-              Json.obj(
-                "name" -> "robotic",
-                "status" -> "AVAILABLE")
+              Json.obj("name" -> "metadata", "status" -> "AVAILABLE"),
+              Json.obj("name" -> "iform", "status"    -> "AVAILABLE"),
+              Json.obj("name" -> "robotic", "status"  -> "AVAILABLE")
             )
           )
         )
@@ -88,4 +81,5 @@ class FileUploadController @Inject()(val wSClient: WSClient,
       Ok
     }
   }
+
 }

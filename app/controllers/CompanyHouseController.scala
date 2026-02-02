@@ -28,19 +28,18 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.io.Source
 
 @Singleton
-class CompanyHouseController @Inject()(cc: ControllerComponents) extends BackendController(cc) with Logging {
+class CompanyHouseController @Inject() (cc: ControllerComponents) extends BackendController(cc) with Logging {
 
   implicit val ec: ExecutionContext = cc.executionContext
 
-  private def getJsonResponse(path: String): JsValue = {
+  private def getJsonResponse(path: String): JsValue =
     Json.parse(Source.fromInputStream(getClass.getResourceAsStream(s"/resources/json/$path"), "utf-8").mkString)
-  }
 
   private def createJsonResponseWithDateOfCreation(daysSinceCompanyCreation: Int): JsValue = {
     val companyDetailsFromFile = getJsonResponse("200-CompanyHouseResponse.json").as[CompanyDetails]
 
     val companyCreationDate = LocalDate.now(ZoneId.of("GMT")).minusDays(daysSinceCompanyCreation)
-    val companyDetails = companyDetailsFromFile.copy(dateOfCreation = Some(companyCreationDate))
+    val companyDetails      = companyDetailsFromFile.copy(dateOfCreation = Some(companyCreationDate))
 
     Json.toJson(companyDetails)
   }
@@ -57,7 +56,7 @@ class CompanyHouseController @Inject()(cc: ControllerComponents) extends Backend
           case "00000065" => Ok(createJsonResponseWithDateOfCreation(daysSinceCompanyCreation = 65))
           case "00000404" => NotFound(getJsonResponse("404-CompanyHouseResponse.json"))
           case "00000429" => TooManyRequests(getJsonResponse("429-CompanyHouseResponse.json"))
-          case _ => Ok(getJsonResponse("200-CompanyHouseResponse.json"))
+          case _          => Ok(getJsonResponse("200-CompanyHouseResponse.json"))
         }
       }
     } else {
@@ -65,4 +64,5 @@ class CompanyHouseController @Inject()(cc: ControllerComponents) extends Backend
       Future.successful(BadRequest("Authorization Header is missing"))
     }
   }
+
 }
