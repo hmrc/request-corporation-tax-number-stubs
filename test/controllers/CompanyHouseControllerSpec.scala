@@ -27,7 +27,7 @@ import play.api.test.Helpers._
 import java.time.{LocalDate, ZoneId}
 
 class CompanyHouseControllerSpec extends TestFixture with ScalaFutures {
-  lazy val CompanyHouseController                      = new CompanyHouseController(stubCC)
+  lazy val CompanyHouseController = new CompanyHouseController(stubCC)
 
   val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("GET", "")
     .withFormUrlEncodedBody("html" -> "<html")
