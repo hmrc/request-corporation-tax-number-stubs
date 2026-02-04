@@ -31,7 +31,6 @@ import scala.concurrent.ExecutionContext
 import scala.reflect.ClassTag
 
 trait TestFixture extends PlaySpec with MockitoSugar with GuiceOneAppPerSuite {
-//  val app: Application
   def real[T: ClassTag]: T = injector.instanceOf[T]
 
   implicit lazy val materializer: Materializer = app.injector.instanceOf[Materializer]
