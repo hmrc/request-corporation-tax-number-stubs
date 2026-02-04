@@ -17,9 +17,11 @@
 package controllers
 
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import play.api.Logging
 import play.api.libs.json.{JsArray, Json}
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
