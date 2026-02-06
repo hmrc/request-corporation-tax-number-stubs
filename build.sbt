@@ -9,7 +9,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(defaultSettings())
   .settings(CodeCoverageSettings())
   .settings(
-    scalaVersion := "2.13.16",
+    scalaVersion := "3.3.7",
     libraryDependencies ++= AppDependencies(),
     Test / parallelExecution := false,
     Test / fork := false,
