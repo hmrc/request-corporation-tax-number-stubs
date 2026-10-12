@@ -36,4 +36,5 @@ class AppConfigSpec extends AnyWordSpec with Matchers {
       appConfig.callbackUrl shouldBe "http://example.com/ct"
     }
   }
+
 }
